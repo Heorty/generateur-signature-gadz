@@ -29,6 +29,8 @@ const DEFAULTS = {
   boquette: "Boquette",
   bouls: ["Boul'ss"],
   boulsCols: "auto",
+  rightSideText: "",
+  rightSideOrientation: "90",
   buqueFont: "Clunsois",
   famsFont: "Clunsois",
   secondaryFont: "Clunsois",
@@ -348,12 +350,14 @@ async function handleSvgImport(e) {
       const proms = readText("text-proms");
       const bande = readText("text-bande");
       const boquette = readText("text-boquette");
+      const rightSide = readText("text-right-side");
 
       if (buque !== null) document.getElementById("buque").value = buque;
       if (fams !== null) document.getElementById("fams").value = fams;
       if (proms !== null) document.getElementById("proms").value = proms;
       if (bande !== null) document.getElementById("bande").value = bande;
       if (boquette !== null) document.getElementById("boquette").value = boquette;
+      if (rightSide !== null) document.getElementById("rightSideText").value = rightSide;
 
       const boulsCols = Array.from(svgEl.querySelectorAll("[id^='text-bouls']"));
       if (boulsCols.length > 0) {
@@ -412,6 +416,8 @@ async function handleSvgImport(e) {
 
 function resetParameters() {
   document.getElementById("boulsCols").value = DEFAULTS.boulsCols;
+  document.getElementById("rightSideText").value = DEFAULTS.rightSideText;
+  document.getElementById("rightSideOrientation").value = DEFAULTS.rightSideOrientation;
   document.getElementById("buqueFont").value = DEFAULTS.buqueFont;
   document.getElementById("famsFont").value = DEFAULTS.famsFont;
   document.getElementById("secondaryFont").value = DEFAULTS.secondaryFont;
@@ -442,6 +448,8 @@ function getState() {
     boquette: document.getElementById("boquette").value,
     bouls: boulsList.map((s) => s.trim()).filter(Boolean),
     boulsCols: document.getElementById("boulsCols").value || DEFAULTS.boulsCols,
+    rightSideText: document.getElementById("rightSideText").value,
+    rightSideOrientation: document.getElementById("rightSideOrientation").value || DEFAULTS.rightSideOrientation,
     buqueFont: document.getElementById("buqueFont").value || DEFAULTS.buqueFont,
     famsFont: document.getElementById("famsFont").value || DEFAULTS.famsFont,
     secondaryFont: document.getElementById("secondaryFont").value || DEFAULTS.secondaryFont,
@@ -578,6 +586,8 @@ function buildSignatureSVGString(
     proms,
     bande,
     boquette,
+    rightSideText,
+    rightSideOrientation,
     buqueFont,
     famsFont,
     secondaryFont,
@@ -625,7 +635,11 @@ function buildSignatureSVGString(
     ? positions.famsY
     : Math.min(buqueY + buqueSize * 0.45 + famsSize * 0.55 + 0.5, H - 9.5);
   const promsX = positions ? positions.promsX : 6.5 * cornerScale;
+  const rightSideX = positions ? positions.rightSideX : W - 6.5 * cornerScale;
   const boulsStartX = W - 6 * cornerScale;
+  const hasRightSide = rightSideText.trim().length > 0;
+  const rightTransform =
+    rightSideOrientation !== "0" ? ` transform="rotate(${rightSideOrientation}, ${rightSideX}, ${cy})"` : "";
 
   const commonSecondary = `font-family:'${secondaryFont}',sans-serif;font-size:${textSize}px;fill:${textColor};`;
   const buqueStyle = `font-family:'${buqueFont}',sans-serif;font-size:${buqueSize}px;fill:${textColor};`;
@@ -652,6 +666,7 @@ function buildSignatureSVGString(
     <text id="text-buque" x="${cx}" y="${buqueY}" text-anchor="middle" dominant-baseline="central" style="${buqueStyle}">${escapeXml(buque)}</text>
     ${hasFams ? `<text id="text-fams" x="${cx}" y="${famsY}" text-anchor="middle" dominant-baseline="central" style="${famsStyle}">${escapeXml(fams)}</text>` : ""}
     <text id="text-proms" x="${promsX}" y="${cy}" text-anchor="middle" dominant-baseline="central" transform="rotate(-90, ${promsX}, ${cy})" style="${commonSecondary}">${escapeXml(proms)}</text>
+    ${hasRightSide ? `<text id="text-right-side" x="${rightSideX}" y="${cy}" text-anchor="middle" dominant-baseline="central"${rightTransform} style="${commonSecondary}">${escapeXml(rightSideText)}</text>` : ""}
     ${boulsMarkup}
     <text id="text-boquette" x="${cx}" y="${boquetteY}" text-anchor="middle" dominant-baseline="central" style="${commonSecondary}">${escapeXml(boquette)}</text>
   </g>
@@ -681,6 +696,7 @@ function renderSignature() {
   const buqueBox = safeGetBBox(svg, "text-buque");
   const famsBox = safeGetBBox(svg, "text-fams");
   const promsBox = safeGetBBox(svg, "text-proms");
+  const rightBox = safeGetBBox(svg, "text-right-side");
   const boquetteBox = safeGetBBox(svg, "text-boquette");
 
   const colBoxes = columns.map((_, c) => safeGetBBox(svg, `text-bouls-col-${c}`));
@@ -710,8 +726,12 @@ function renderSignature() {
     const promsX = 6.5 * cornerScale;
     const promsThickness = promsBox.height; // hauteur locale = largeur après rotation -90°
     const promsLength = promsBox.width; // largeur locale = hauteur après rotation -90°
+    const hasRightSide = state.rightSideText.trim().length > 0;
+    const isRightVertical = state.rightSideOrientation !== "0";
+    const rightThickness = hasRightSide ? (isRightVertical ? rightBox.height : rightBox.width) : 0;
+    const rightLength = hasRightSide ? (isRightVertical ? rightBox.width : rightBox.height) : 0;
     const leftClearance = Math.max(ekrMargin, promsX + promsThickness / 2 + 4);
-    const rightClearance = ekrMargin;
+    const rightClearance = Math.max(ekrMargin, 6.5 * cornerScale + rightThickness / 2 + 4);
 
     const minWForBande = bandeBox.width + 2 * ekrMargin;
     const minWForBoquette = boquetteBox.width + 2 * ekrMargin;
@@ -722,11 +742,12 @@ function renderSignature() {
     const bottomZoneH = 4 + boquetteBox.height + 3;
     const minHForCenter = topZoneH + centerBlockH + bottomZoneH;
     const minHForProms = promsLength + 2 * ekrMargin;
+    const minHForRightSide = hasRightSide ? rightLength + 2 * ekrMargin : 0;
     const minHForBouls = boulsContentH > 0 ? boulsContentH + 2 * ekrMargin : 0;
     frameH = Math.max(
       state.height,
       boulsH,
-      Math.ceil(Math.max(minHForCenter, minHForProms, minHForBouls))
+      Math.ceil(Math.max(minHForCenter, minHForProms, minHForRightSide, minHForBouls))
     );
 
     cornerScale = clampNumber(Math.min(frameW / 100, frameH / 50), 0.85, 1.5, 1);
@@ -741,10 +762,16 @@ function renderSignature() {
   const buqueY = hasFams ? areaCy - (famsGap + famsBox.height) / 2 : areaCy;
   const famsY = buqueY + buqueBox.height / 2 + famsGap + famsBox.height / 2;
   const promsX = 6.5 * cornerScale;
+  const rightSideX = frameW - 6.5 * cornerScale;
+  const hasRightSide = state.rightSideText.trim().length > 0;
+  const isRightVertical = state.rightSideOrientation !== "0";
+  const rightThickness = hasRightSide ? (isRightVertical ? rightBox.height : rightBox.width) : 0;
 
-  // Colonnes de boul'ss à droite du cadre
+  // Colonnes de boul'ss à droite du cadre (décalées si un texte côté droit est présent)
   const colOffsets = [];
-  let cursorX = frameW - 6 * cornerScale;
+  let cursorX = hasRightSide
+    ? Math.max(frameW + 2, rightSideX + rightThickness / 2 + 4)
+    : frameW - 6 * cornerScale;
   const colGap = 4;
   colWidths.forEach((w) => {
     colOffsets.push(cursorX);
@@ -753,7 +780,7 @@ function renderSignature() {
   const totalW =
     columns.length > 0 ? Math.max(frameW, Math.ceil(cursorX - colGap + 3)) : frameW;
 
-  const positions = { bandeY, boquetteY, buqueY, famsY, promsX };
+  const positions = { bandeY, boquetteY, buqueY, famsY, promsX, rightSideX };
   lastLayoutMetrics = {
     frameWidth: frameW,
     frameHeight: frameH,

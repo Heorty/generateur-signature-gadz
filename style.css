@@ -350,3 +350,23 @@ button:active {
 .btn-add:hover {
     background: #e0edff;
 }
+
+.advanced-options {
+    margin-top: 4px;
+    padding: 8px 10px;
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+}
+
+.advanced-options summary {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    user-select: none;
+}
+
+.advanced-options[open] summary {
+    color: var(--primary);
+}
