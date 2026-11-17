@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générateur de Signature Gadz</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js" defer></script>
+    <script src="main.js" defer></script>
+</head>
+
+<body>
+    <header class="app-header">
+        <h1>Générateur de Signature Gadz</h1>
+        <p class="subtitle">Créez votre signature et exportez-la en SVG, PNG ou PDF</p>
+    </header>
+
+    <main class="app-layout">
+        <section class="panel controls-panel" aria-label="Paramètres de la signature">
+            <form id="signatureForm" autocomplete="off">
+                <div class="section-block">
+                    <h2>Éléments de la signature</h2>
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label for="buque">Buque <span class="hint">(milieu)</span></label>
+                            <input type="text" id="buque" name="buque" value="Buque" placeholder="Ex : Buque">
+                        </div>
+                        <div class="form-group">
+                            <label for="fams">Fam'ss <span class="hint">(sous la buque)</span></label>
+                            <input type="text" id="fams" name="fams" value="Fam'ss" placeholder="Ex : Fam'ss">
+                        </div>
+                        <div class="form-group">
+                            <label for="proms">Prom'ss <span class="hint">(gauche vertical)</span></label>
+                            <input type="text" id="proms" name="proms" value="Prom'ss" placeholder="Ex : Prom'ss">
+                        </div>
+                        <div class="form-group">
+                            <label for="bande">Bande <span class="hint">(haut)</span></label>
+                            <input type="text" id="bande" name="bande" value="Bande" placeholder="Ex : Bande">
+                        </div>
+                        <div class="form-group">
+                            <label for="boquette">Boquette <span class="hint">(bas)</span></label>
+                            <input type="text" id="boquette" name="boquette" value="Boquette" placeholder="Ex : Boquette">
+                        </div>
+                        <div class="form-group full-width">
+                            <div class="inline-row" style="justify-content: space-between;">
+                                <label>Boul'ss <span class="hint">(liste à droite, peut dépasser)</span></label>
+                                <select id="boulsCols" name="boulsCols" style="width: auto; padding: 4px 8px; font-size: 0.82rem;">
+                                    <option value="auto" selected>Colonnes : Auto (1–3)</option>
+                                    <option value="1">1 colonne</option>
+                                    <option value="2">2 colonnes</option>
+                                    <option value="3">3 colonnes</option>
+                                </select>
+                            </div>
+                            <div id="boulsList" class="bouls-list"></div>
+                            <button type="button" id="addBoulsBtn" class="btn-add">+ Ajouter un boul'ss</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-block">
+                    <h2>Polices</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="buqueFont">Police de la Buque</label>
+                            <select id="buqueFont" name="buqueFont"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="famsFont">Police de la Fam'ss</label>
+                            <select id="famsFont" name="famsFont"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="secondaryFont">Autres textes</label>
+                            <select id="secondaryFont" name="secondaryFont"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="customFontInput">Ajouter une police <span class="hint">(.ttf, .otf, .woff, .woff2)</span></label>
+                            <input type="file" id="customFontInput" accept=".ttf,.otf,.woff,.woff2">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-block">
+                    <h2>Apparence &amp; Dimensions</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="buqueSize">Taille Buque : <strong id="buqueSizeVal">18</strong> mm</label>
+                            <input type="range" id="buqueSize" min="8" max="34" step="0.5" value="18">
+                        </div>
+                        <div class="form-group">
+                            <label for="famsSize">Taille Fam'ss : <strong id="famsSizeVal">5</strong> mm</label>
+                            <input type="range" id="famsSize" min="3" max="16" step="0.5" value="5">
+                        </div>
+                        <div class="form-group">
+                            <label for="famsGap">Espace Buque / Fam'ss : <strong id="famsGapVal">-1</strong> mm</label>
+                            <input type="range" id="famsGap" min="-6" max="10" step="0.5" value="-1">
+                        </div>
+                        <div class="form-group">
+                            <label for="textSize">Taille autres textes : <strong id="textSizeVal">5</strong> mm</label>
+                            <input type="range" id="textSize" min="3" max="9" step="0.25" value="5">
+                        </div>
+                        <div class="form-group">
+                            <label for="showCorners">Équerres</label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="showCorners" checked>
+                                Afficher les équerres
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="sigWidth">Largeur (mm)</label>
+                            <input type="number" id="sigWidth" min="60" max="250" step="1" value="100">
+                        </div>
+                        <div class="form-group">
+                            <label for="sigHeight">Hauteur (mm)</label>
+                            <input type="number" id="sigHeight" min="35" max="150" step="1" value="50">
+                        </div>
+                        <div class="form-group">
+                            <label for="textColor">Couleur textes</label>
+                            <input type="color" id="textColor" value="#000000">
+                        </div>
+                        <div class="form-group">
+                            <label for="cornerColor">Couleur équerres</label>
+                            <input type="color" id="cornerColor" value="#000000">
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="bgColor">Fond</label>
+                            <div class="inline-row">
+                                <input type="color" id="bgColor" value="#ffffff">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="transparentBg" checked>
+                                    Transparent
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-block">
+                    <h2>Importer un SVG</h2>
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label for="importSvgInput">Fichier SVG <span class="hint">(recharge une signature ou ajoute un motif)</span></label>
+                            <input type="file" id="importSvgInput" accept=".svg,image/svg+xml">
+                        </div>
+                    </div>
+                    <div id="importedSvgControls" class="form-grid" style="display: none; margin-top: 10px;">
+                        <div class="form-group">
+                            <label for="importedSvgScale">Taille motif : <strong id="importedSvgScaleVal">60</strong>%</label>
+                            <input type="range" id="importedSvgScale" min="10" max="100" step="5" value="60">
+                        </div>
+                        <div class="form-group">
+                            <label for="importedSvgOpacity">Opacité : <strong id="importedSvgOpacityVal">100</strong>%</label>
+                            <input type="range" id="importedSvgOpacity" min="10" max="100" step="5" value="100">
+                        </div>
+                        <div class="form-group full-width">
+                            <button type="button" id="removeImportedSvgBtn" class="btn-secondary" style="margin-top: 4px;">Retirer le SVG importé</button>
+                        </div>
+                    </div>
+                    <button type="button" id="resetBtn" class="btn-secondary">Réinitialiser les paramètres</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="panel preview-panel" aria-label="Aperçu et export">
+            <div class="preview-header">
+                <h2>Aperçu</h2>
+                <span id="dimensionsBadge" class="badge">100 × 50 mm</span>
+            </div>
+            <div id="svgContainer" class="svg-stage"></div>
+            <p id="statusMsg" class="status-msg" role="status" aria-live="polite"></p>
+            <div class="export-actions">
+                <button type="button" id="downloadSvgBtn" class="btn-primary">Télécharger SVG</button>
+                <button type="button" id="downloadPngBtn" class="btn-primary">Télécharger PNG</button>
+                <button type="button" id="downloadPdfBtn" class="btn-primary">Télécharger PDF</button>
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>

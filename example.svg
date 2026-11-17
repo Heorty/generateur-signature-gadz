@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="100mm"
+   height="50mm"
+   viewBox="0 0 100 50"
+   id="SVGRoot"
+   version="1.1"
+   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+   sodipodi:docname="test.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     inkscape:document-units="mm"
+     inkscape:zoom="2"
+     inkscape:cx="213.25"
+     inkscape:cy="22.25"
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:window-width="1920"
+     inkscape:window-height="989"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1">
+    <linearGradient
+       id="linearGradient1"
+       inkscape:collect="always">
+      <stop
+         style="stop-color:#ff0000;stop-opacity:1;"
+         offset="0.5"
+         id="stop1" />
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0.5"
+         id="stop2" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1"
+       id="linearGradient2"
+       x1="42.525703"
+       y1="35.214977"
+       x2="42.525703"
+       y2="24.128645"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-5.953125,3.0427083)" />
+  </defs>
+  <g
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g2"
+       inkscape:label="ekr">
+      <path
+         style="fill:none;stroke:#000000;stroke-width:0.820208;stroke-linecap:round;stroke-linejoin:bevel;stroke-opacity:1;paint-order:markers stroke fill"
+         d="m 6,18 v -8 h 4 V 6 h 8"
+         id="path1"
+         sodipodi:nodetypes="ccccc" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:0.820208;stroke-linecap:round;stroke-linejoin:bevel;stroke-opacity:1;paint-order:markers stroke fill"
+         d="M 8,14 V 8 h 6"
+         id="path2"
+         sodipodi:nodetypes="ccc" />
+    </g>
+    <g
+       id="g2-1"
+       inkscape:label="ekr"
+       transform="rotate(180,39.205052,24.205052)">
+      <path
+         style="fill:none;stroke:#000000;stroke-width:0.820208;stroke-linecap:round;stroke-linejoin:bevel;stroke-opacity:1;paint-order:markers stroke fill"
+         d="m 6,18 v -8 h 4 V 6 h 8"
+         id="path1-7"
+         sodipodi:nodetypes="ccccc" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:0.820208;stroke-linecap:round;stroke-linejoin:bevel;stroke-opacity:1;paint-order:markers stroke fill"
+         d="M 8,14 V 8 h 6"
+         id="path2-1"
+         sodipodi:nodetypes="ccc" />
+    </g>
+    <g
+       id="g2-7"
+       inkscape:label="ekr"
+       transform="matrix(1,0,0,-1,0.41010401,48.410104)">
+      <path
+         style="fill:none;stroke:#000000;stroke-width:0.820208;stroke-linecap:round;stroke-linejoin:bevel;stroke-opacity:1;paint-order:markers stroke fill"
+         d="m 6,18 v -8 h 4 V 6 h 8"
+         id="path1-6"
+         sodipodi:nodetypes="ccccc" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:0.820208;stroke-linecap:round;stroke-linejoin:bevel;stroke-opacity:1;paint-order:markers stroke fill"
+         d="M 8,14 V 8 h 6"
+         id="path2-14"
+         sodipodi:nodetypes="ccc" />
+    </g>
+    <g
+       id="g2-8"
+       inkscape:label="ekr"
+       transform="matrix(-1,0,0,1,78.410104,0.41010401)">
+      <path
+         style="fill:none;stroke:#000000;stroke-width:0.820208;stroke-linecap:round;stroke-linejoin:bevel;stroke-opacity:1;paint-order:markers stroke fill"
+         d="m 6,18 v -8 h 4 V 6 h 8"
+         id="path1-8"
+         sodipodi:nodetypes="ccccc" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:0.820208;stroke-linecap:round;stroke-linejoin:bevel;stroke-opacity:1;paint-order:markers stroke fill"
+         d="M 8,14 V 8 h 6"
+         id="path2-2"
+         sodipodi:nodetypes="ccc" />
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:5px;font-family:Zagots;-inkscape-font-specification:Zagots;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:none;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       x="28.71697"
+       y="8.4964848"
+       id="text2"><tspan
+         sodipodi:role="line"
+         id="tspan2"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5px;font-family:Clunsois;-inkscape-font-specification:Clunsois;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.1;stroke-dasharray:none;stroke-opacity:1"
+         x="28.71697"
+         y="8.4964848">IDauphin's</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:15px;font-family:Zagots;-inkscape-font-specification:Zagots;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;mix-blend-mode:difference;fill:url(#linearGradient2);stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       x="31.001293"
+       y="35.334152"
+       id="text2-2-7"><tspan
+         sodipodi:role="line"
+         id="tspan2-1-6"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15px;font-family:Zagots;-inkscape-font-specification:Zagots;fill:url(#linearGradient2);fill-opacity:1;stroke:#000000;stroke-width:0.1;stroke-dasharray:none;stroke-opacity:1"
+         x="31.001293"
+         y="35.334152">151</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:5px;font-family:Zagots;-inkscape-font-specification:Zagots;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;white-space:pre;inline-size:17.4564;display:inline;fill:none;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       x="-1.0474702"
+       y="25.4799"
+       id="text2-2-7-2"
+       transform="translate(34.528125,18.388542)"><tspan
+         x="-1.0474702"
+         y="25.4799"
+         id="tspan9"><tspan
+           style="font-family:Clunsois;-inkscape-font-specification:Clunsois;fill:#000000"
+           id="tspan1">‡225</tspan></tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:5px;font-family:Zagots;-inkscape-font-specification:Zagots;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:none;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       x="69.205742"
+       y="23.331133"
+       id="text2-2-7-3"><tspan
+         sodipodi:role="line"
+         id="tspan2-1-6-1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5px;font-family:Clunsois;-inkscape-font-specification:Clunsois;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.1;stroke-dasharray:none;stroke-opacity:1"
+         x="69.205742"
+         y="23.331133">‹ Knard ZPT</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;font-family:Clunsois;-inkscape-font-specification:Clunsois;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       x="17.125263"
+       y="25.891836"
+       id="text3"><tspan
+         sodipodi:role="line"
+         id="tspan3"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;font-family:Audiowide;-inkscape-font-specification:Audiowide;stroke-width:0.1"
+         x="17.125263"
+         y="25.891836">Echo</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;font-family:Clunsois;-inkscape-font-specification:Clunsois;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       x="2.9934189"
+       y="21.702284"
+       id="text4"><tspan
+         sodipodi:role="line"
+         id="tspan4"
+         style="stroke-width:0.1"
+         x="2.9934189"
+         y="21.702284" /></text>
+    <text
+       xml:space="preserve"
+       style="font-size:20px;font-family:Zagots;-inkscape-font-specification:Zagots;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#ffd100;stroke-width:0.820208;stroke-linecap:round;stroke-linejoin:bevel;paint-order:markers stroke fill"
+       x="54.636459"
+       y="-5.6885414"
+       id="text6"><tspan
+         sodipodi:role="line"
+         id="tspan6"
+         style="stroke-width:0.820208"
+         x="54.636459"
+         y="-5.6885414" /></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15px;font-family:Zagots;-inkscape-font-specification:Zagots;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#ffd100;stroke-width:0.820208;stroke-linecap:round;stroke-linejoin:bevel;paint-order:markers stroke fill"
+       x="60.192707"
+       y="37.835415"
+       id="text5"><tspan
+         sodipodi:role="line"
+         id="tspan5"
+         style="stroke-width:0.820208"
+         x="60.192707"
+         y="37.835415" /></text>
+  </g>
+</svg>
