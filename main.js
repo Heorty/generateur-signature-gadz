@@ -746,6 +746,8 @@ function buildSignatureSVGString(
   const rightSideX = positions ? positions.rightSideX : W - 6.5 * cornerScale;
   const boulsStartX = W - 6 * cornerScale;
   const hasRightSide = rightSideText.trim().length > 0;
+  const leftTransform =
+    leftSideOrientation !== "0" ? ` transform="rotate(${leftSideOrientation}, ${promsX}, ${cy})"` : "";
   const rightTransform =
     rightSideOrientation !== "0" ? ` transform="rotate(${rightSideOrientation}, ${rightSideX}, ${cy})"` : "";
 
@@ -787,7 +789,7 @@ function buildSignatureSVGString(
     <text id="text-bande" x="${cx}" y="${bandeY}" text-anchor="middle" dominant-baseline="central" style="${commonSecondary}">${escapeXml(bande)}</text>
     <text id="text-buque" x="${cx}" y="${buqueY}" text-anchor="middle" dominant-baseline="central" style="${buqueStyle}">${escapeXml(buque)}</text>
     ${famsMarkup}
-    <text id="text-proms" x="${promsX}" y="${cy}" text-anchor="middle" dominant-baseline="central" transform="rotate(${leftSideOrientation}, ${promsX}, ${cy})" style="${commonSecondary}">${escapeXml(proms)}</text>
+    <text id="text-proms" x="${promsX}" y="${cy}" text-anchor="middle" dominant-baseline="central"${leftTransform} style="${commonSecondary}">${escapeXml(proms)}</text>
     ${hasRightSide ? `<text id="text-right-side" x="${rightSideX}" y="${cy}" text-anchor="middle" dominant-baseline="central"${rightTransform} style="${commonSecondary}">${escapeXml(rightSideText)}</text>` : ""}
     ${boulsMarkup}
     <text id="text-boquette" x="${cx}" y="${boquetteY}" text-anchor="middle" dominant-baseline="central" style="${commonSecondary}">${escapeXml(boquette)}</text>
@@ -848,8 +850,9 @@ function renderSignature() {
     const ekrReach = 18 * cornerScale;
     const ekrMargin = ekrReach + 2.5;
     const promsX = 6.5 * cornerScale;
-    const promsThickness = promsBox.height; // hauteur locale = largeur après rotation -90°
-    const promsLength = promsBox.width; // largeur locale = hauteur après rotation -90°
+    const isLeftVertical = state.leftSideOrientation !== "0";
+    const promsThickness = isLeftVertical ? promsBox.height : promsBox.width;
+    const promsLength = isLeftVertical ? promsBox.width : promsBox.height;
     const hasRightSide = state.rightSideText.trim().length > 0;
     const isRightVertical = state.rightSideOrientation !== "0";
     const rightThickness = hasRightSide ? (isRightVertical ? rightBox.height : rightBox.width) : 0;
