@@ -849,16 +849,17 @@ function renderSignature() {
   for (let pass = 0; pass < 2; pass++) {
     const ekrReach = 18 * cornerScale;
     const ekrMargin = ekrReach + 2.5;
-    const promsX = 6.5 * cornerScale;
     const isLeftVertical = state.leftSideOrientation !== "0";
     const promsThickness = isLeftVertical ? promsBox.height : promsBox.width;
     const promsLength = isLeftVertical ? promsBox.width : promsBox.height;
+    const promsX = Math.max(6.5 * cornerScale, promsThickness / 2 + 2.5);
     const hasRightSide = state.rightSideText.trim().length > 0;
     const isRightVertical = state.rightSideOrientation !== "0";
     const rightThickness = hasRightSide ? (isRightVertical ? rightBox.height : rightBox.width) : 0;
     const rightLength = hasRightSide ? (isRightVertical ? rightBox.width : rightBox.height) : 0;
+    const rightMargin = Math.max(6.5 * cornerScale, rightThickness / 2 + 2.5);
     const leftClearance = Math.max(ekrMargin, promsX + promsThickness / 2 + 4);
-    const rightClearance = Math.max(ekrMargin, 6.5 * cornerScale + rightThickness / 2 + 4);
+    const rightClearance = Math.max(ekrMargin, rightMargin + rightThickness / 2 + 4);
 
     const minWForBande = bandeBox.width + 2 * ekrMargin;
     const minWForBoquette = boquetteBox.width + 2 * ekrMargin;
@@ -888,11 +889,13 @@ function renderSignature() {
   const areaCy = (areaTop + areaBottom) / 2;
   const buqueY = hasFams ? areaCy - (famsGap + famsBox.height) / 2 : areaCy;
   const famsY = buqueY + buqueBox.height / 2 + famsGap + famsBox.height / 2;
-  const promsX = 6.5 * cornerScale;
-  const rightSideX = frameW - 6.5 * cornerScale;
+  const isLeftVertical = state.leftSideOrientation !== "0";
+  const promsThickness = isLeftVertical ? promsBox.height : promsBox.width;
+  const promsX = Math.max(6.5 * cornerScale, promsThickness / 2 + 2.5);
   const hasRightSide = state.rightSideText.trim().length > 0;
   const isRightVertical = state.rightSideOrientation !== "0";
   const rightThickness = hasRightSide ? (isRightVertical ? rightBox.height : rightBox.width) : 0;
+  const rightSideX = frameW - Math.max(6.5 * cornerScale, rightThickness / 2 + 2.5);
 
   // Colonnes de boul'ss à droite du cadre (décalées si un texte côté droit est présent)
   const colOffsets = [];
