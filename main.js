@@ -33,6 +33,7 @@ const DEFAULTS = {
   rightSideText: "",
   leftSideOrientation: "-90",
   rightSideOrientation: "90",
+  sideTextSize: 10,
   hideBouls: false,
   buqueFont: "Clunsois",
   famsFont: "Clunsois",
@@ -298,6 +299,7 @@ function syncRangeLabels() {
   document.getElementById("famsSizeVal").textContent = document.getElementById("famsSize").value;
   document.getElementById("famsGapVal").textContent = document.getElementById("famsGap").value;
   document.getElementById("textSizeVal").textContent = document.getElementById("textSize").value;
+  document.getElementById("sideTextSizeVal").textContent = document.getElementById("sideTextSize").value;
   document.getElementById("importedSvgScaleVal").textContent = document.getElementById("importedSvgScale").value;
   document.getElementById("importedSvgOpacityVal").textContent = document.getElementById("importedSvgOpacity").value;
   const w = clampNumber(document.getElementById("sigWidth").value, 60, 250, DEFAULTS.width);
@@ -522,6 +524,7 @@ function resetParameters() {
   document.getElementById("rightSideText").value = DEFAULTS.rightSideText;
   document.getElementById("leftSideOrientation").value = DEFAULTS.leftSideOrientation;
   document.getElementById("rightSideOrientation").value = DEFAULTS.rightSideOrientation;
+  document.getElementById("sideTextSize").value = DEFAULTS.sideTextSize;
   document.getElementById("hideBouls").checked = DEFAULTS.hideBouls;
   document.getElementById("buqueFont").value = DEFAULTS.buqueFont;
   document.getElementById("famsFont").value = DEFAULTS.famsFont;
@@ -560,6 +563,7 @@ function getState() {
     rightSideText: document.getElementById("rightSideText").value,
     leftSideOrientation: document.getElementById("leftSideOrientation").value || DEFAULTS.leftSideOrientation,
     rightSideOrientation: document.getElementById("rightSideOrientation").value || DEFAULTS.rightSideOrientation,
+    sideTextSize: clampNumber(document.getElementById("sideTextSize").value, 3, 24, DEFAULTS.sideTextSize),
     hideBouls: document.getElementById("hideBouls").checked,
     buqueFont: document.getElementById("buqueFont").value || DEFAULTS.buqueFont,
     famsFont: document.getElementById("famsFont").value || DEFAULTS.famsFont,
@@ -701,6 +705,7 @@ function buildSignatureSVGString(
     rightSideText,
     leftSideOrientation,
     rightSideOrientation,
+    sideTextSize,
     buqueFont,
     famsFont,
     secondaryFont,
@@ -760,6 +765,7 @@ function buildSignatureSVGString(
     rightSideOrientation !== "0" ? ` transform="rotate(${rightSideOrientation}, ${rightSideX}, ${cy})"` : "";
 
   const commonSecondary = `font-family:'${secondaryFont}',sans-serif;font-size:${textSize}px;fill:${textColor};`;
+  const sideTextStyle = `font-family:'${secondaryFont}',sans-serif;font-size:${sideTextSize}px;fill:${textColor};`;
   const buqueStyle = `font-family:'${buqueFont}',sans-serif;font-size:${buqueSize}px;fill:${textColor};`;
   const famsStyle = `font-family:'${famsFont}',sans-serif;font-size:${famsSize}px;fill:${textColor};`;
   const boulsMarkup = buildBoulsMarkup(
@@ -798,8 +804,8 @@ function buildSignatureSVGString(
     <text id="text-buque" x="${cx}" y="${buqueY}" text-anchor="middle" dominant-baseline="central" style="${buqueStyle}">${escapeXml(buque)}</text>
     ${famsMarkup}
     <text id="text-proms" x="${promsX}" y="${cy}" text-anchor="middle" dominant-baseline="central" transform="rotate(-90, ${promsX}, ${cy})" style="${commonSecondary}">${escapeXml(proms)}</text>
-    ${hasLeftSide ? `<text id="text-left-side" x="${leftSideX}" y="${cy}" text-anchor="middle" dominant-baseline="central"${leftTransform} style="${commonSecondary}">${escapeXml(leftSideText)}</text>` : ""}
-    ${hasRightSide ? `<text id="text-right-side" x="${rightSideX}" y="${cy}" text-anchor="middle" dominant-baseline="central"${rightTransform} style="${commonSecondary}">${escapeXml(rightSideText)}</text>` : ""}
+    ${hasLeftSide ? `<text id="text-left-side" x="${leftSideX}" y="${cy}" text-anchor="middle" dominant-baseline="central"${leftTransform} style="${sideTextStyle}">${escapeXml(leftSideText)}</text>` : ""}
+    ${hasRightSide ? `<text id="text-right-side" x="${rightSideX}" y="${cy}" text-anchor="middle" dominant-baseline="central"${rightTransform} style="${sideTextStyle}">${escapeXml(rightSideText)}</text>` : ""}
     ${boulsMarkup}
     <text id="text-boquette" x="${cx}" y="${boquetteY}" text-anchor="middle" dominant-baseline="central" style="${commonSecondary}">${escapeXml(boquette)}</text>
   </g>
@@ -888,7 +894,8 @@ function renderSignature() {
 
     const minWForBande = bandeBox.width + 2 * ekrMargin;
     const minWForBoquette = boquetteBox.width + 2 * ekrMargin;
-    const minWForCenter = Math.max(buqueBox.width, famsBox.width) + leftClearance + rightClearance;
+    const minWForCenter =
+      Math.max(buqueBox.width, famsBox.width) + 2 * Math.max(leftClearance, rightClearance);
     frameW = Math.max(state.width, Math.ceil(Math.max(minWForBande, minWForBoquette, minWForCenter)));
 
     const topZoneH = 4 + bandeBox.height + 3;
