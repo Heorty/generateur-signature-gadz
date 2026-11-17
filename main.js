@@ -31,6 +31,7 @@ const DEFAULTS = {
   boulsCols: "auto",
   rightSideText: "",
   rightSideOrientation: "90",
+  hideBouls: false,
   buqueFont: "Clunsois",
   famsFont: "Clunsois",
   secondaryFont: "Clunsois",
@@ -182,6 +183,11 @@ function bindEvents() {
     renderSignature();
   });
 
+  document.getElementById("rightSideText").addEventListener("input", (e) => {
+    if (e.target.value.trim().length > 0) {
+      document.getElementById("hideBouls").checked = true;
+    }
+  });
   document.getElementById("customFontInput").addEventListener("change", handleCustomFontUpload);
   document.getElementById("famsLogoInput").addEventListener("change", handleFamsLogoUpload);
   document.getElementById("removeFamsLogoBtn").addEventListener("click", () => {
@@ -510,6 +516,7 @@ function resetParameters() {
   document.getElementById("boulsCols").value = DEFAULTS.boulsCols;
   document.getElementById("rightSideText").value = DEFAULTS.rightSideText;
   document.getElementById("rightSideOrientation").value = DEFAULTS.rightSideOrientation;
+  document.getElementById("hideBouls").checked = DEFAULTS.hideBouls;
   document.getElementById("buqueFont").value = DEFAULTS.buqueFont;
   document.getElementById("famsFont").value = DEFAULTS.famsFont;
   document.getElementById("secondaryFont").value = DEFAULTS.secondaryFont;
@@ -539,10 +546,13 @@ function getState() {
     proms: document.getElementById("proms").value,
     bande: document.getElementById("bande").value,
     boquette: document.getElementById("boquette").value,
-    bouls: boulsList.map((s) => s.trim()).filter(Boolean),
+    bouls: document.getElementById("hideBouls").checked
+      ? []
+      : boulsList.map((s) => s.trim()).filter(Boolean),
     boulsCols: document.getElementById("boulsCols").value || DEFAULTS.boulsCols,
     rightSideText: document.getElementById("rightSideText").value,
     rightSideOrientation: document.getElementById("rightSideOrientation").value || DEFAULTS.rightSideOrientation,
+    hideBouls: document.getElementById("hideBouls").checked,
     buqueFont: document.getElementById("buqueFont").value || DEFAULTS.buqueFont,
     famsFont: document.getElementById("famsFont").value || DEFAULTS.famsFont,
     secondaryFont: document.getElementById("secondaryFont").value || DEFAULTS.secondaryFont,
