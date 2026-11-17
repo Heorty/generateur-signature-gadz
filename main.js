@@ -51,6 +51,7 @@ const DEFAULTS = {
 const fontRegistry = new Map();
 let boulsList = [...DEFAULTS.bouls];
 let importedSvgGraphic = null; // { viewBox, innerMarkup }
+let famsLogo = null; // { type: 'svg' | 'image', aspectRatio, viewBox?, innerMarkup?, dataUrl? }
 let lastLayoutMetrics = {
   totalWidth: DEFAULTS.width,
   effectiveHeight: DEFAULTS.height,
@@ -182,6 +183,12 @@ function bindEvents() {
   });
 
   document.getElementById("customFontInput").addEventListener("change", handleCustomFontUpload);
+  document.getElementById("famsLogoInput").addEventListener("change", handleFamsLogoUpload);
+  document.getElementById("removeFamsLogoBtn").addEventListener("click", () => {
+    clearFamsLogo();
+    renderSignature();
+    setStatus("Logo Fam'ss retiré.");
+  });
   document.getElementById("importSvgInput").addEventListener("change", handleSvgImport);
   document.getElementById("removeImportedSvgBtn").addEventListener("click", () => {
     clearImportedSvg();
@@ -414,6 +421,91 @@ async function handleSvgImport(e) {
   }
 }
 
+function clearFamsLogo() {
+  famsLogo = null;
+  document.getElementById("removeFamsLogoBtn").style.display = "none";
+}
+
+function readFileAsDataURL(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(new Error("Erreur de lecture du fichier"));
+    reader.readAsDataURL(file);
+  });
+}
+
+async function handleFamsLogoUpload(e) {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+
+  try {
+    const isSvg =
+      file.type === "image/svg+xml" || file.name.toLowerCase().endsWith(".svg");
+
+    if (isSvg) {
+      const text = await file.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(text, "image/svg+xml");
+      if (doc.querySelector("parsererror") || !doc.documentElement || doc.documentElement.tagName.toLowerCase() !== "svg") {
+        setStatus("Fichier logo SVG invalide.", true);
+        return;
+      }
+      const svgEl = doc.documentElement;
+      svgEl.querySelectorAll("script").forEach((s) => s.remove());
+
+      let viewBox = svgEl.getAttribute("viewBox");
+      let vbW = 100;
+      let vbH = 100;
+      if (viewBox) {
+        const parts = viewBox.trim().split(/[\s,]+/).map(Number);
+        if (parts.length === 4 && parts[2] > 0 && parts[3] > 0) {
+          vbW = parts[2];
+          vbH = parts[3];
+        }
+      } else {
+        vbW = parseFloat(svgEl.getAttribute("width")) || 100;
+        vbH = parseFloat(svgEl.getAttribute("height")) || 100;
+        viewBox = `0 0 ${vbW} ${vbH}`;
+      }
+
+      const serializer = new XMLSerializer();
+      const innerMarkup = Array.from(svgEl.childNodes)
+        .map((node) => serializer.serializeToString(node))
+        .join("");
+
+      famsLogo = {
+        type: "svg",
+        viewBox,
+        innerMarkup,
+        aspectRatio: vbW / vbH,
+      };
+    } else {
+      const dataUrl = await readFileAsDataURL(file);
+      const dims = await new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve({ w: img.naturalWidth || 100, h: img.naturalHeight || 100 });
+        img.onerror = () => reject(new Error("Format d'image non supporté"));
+        img.src = dataUrl;
+      });
+      famsLogo = {
+        type: "image",
+        dataUrl,
+        aspectRatio: dims.w / dims.h,
+      };
+    }
+
+    document.getElementById("removeFamsLogoBtn").style.display = "block";
+    renderSignature();
+    setStatus(`Logo Fam'ss « ${file.name} » appliqué.`);
+  } catch (err) {
+    console.error(err);
+    setStatus("Erreur lors du chargement du logo Fam'ss.", true);
+  } finally {
+    e.target.value = "";
+  }
+}
+
 function resetParameters() {
   document.getElementById("boulsCols").value = DEFAULTS.boulsCols;
   document.getElementById("rightSideText").value = DEFAULTS.rightSideText;
@@ -433,6 +525,7 @@ function resetParameters() {
   document.getElementById("transparentBg").checked = DEFAULTS.transparentBg;
   document.getElementById("showCorners").checked = DEFAULTS.showCorners;
   clearImportedSvg();
+  clearFamsLogo();
 
   syncRangeLabels();
   renderSignature();
@@ -627,7 +720,8 @@ function buildSignatureSVGString(
 
   const cx = W / 2;
   const cy = H / 2;
-  const hasFams = fams.trim().length > 0;
+  const hasFamsLogo = Boolean(famsLogo);
+  const hasFams = hasFamsLogo || fams.trim().length > 0;
   const bandeY = positions ? positions.bandeY : 6.5;
   const boquetteY = positions ? positions.boquetteY : H - 6.5;
   const buqueY = positions ? positions.buqueY : hasFams ? cy - famsSize * 0.55 : cy;
@@ -653,6 +747,20 @@ function buildSignatureSVGString(
     commonSecondary
   );
 
+  let famsMarkup = "";
+  if (hasFamsLogo) {
+    const logoH = famsSize;
+    const logoW = logoH * famsLogo.aspectRatio;
+    const logoX = cx - logoW / 2;
+    const logoY = famsY - logoH / 2;
+    famsMarkup =
+      famsLogo.type === "svg"
+        ? `<svg id="fams-logo" x="${logoX}" y="${logoY}" width="${logoW}" height="${logoH}" viewBox="${escapeXml(famsLogo.viewBox)}" preserveAspectRatio="xMidYMid meet">${famsLogo.innerMarkup}</svg>`
+        : `<image id="fams-logo" x="${logoX}" y="${logoY}" width="${logoW}" height="${logoH}" href="${famsLogo.dataUrl}" preserveAspectRatio="xMidYMid meet" />`;
+  } else if (hasFams) {
+    famsMarkup = `<text id="text-fams" x="${cx}" y="${famsY}" text-anchor="middle" dominant-baseline="central" style="${famsStyle}">${escapeXml(fams)}</text>`;
+  }
+
   return `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="${exportW}mm" height="${H}mm" viewBox="0 0 ${exportW} ${H}" version="1.1">
   <defs>
@@ -664,7 +772,7 @@ function buildSignatureSVGString(
     ${cornersMarkup}
     <text id="text-bande" x="${cx}" y="${bandeY}" text-anchor="middle" dominant-baseline="central" style="${commonSecondary}">${escapeXml(bande)}</text>
     <text id="text-buque" x="${cx}" y="${buqueY}" text-anchor="middle" dominant-baseline="central" style="${buqueStyle}">${escapeXml(buque)}</text>
-    ${hasFams ? `<text id="text-fams" x="${cx}" y="${famsY}" text-anchor="middle" dominant-baseline="central" style="${famsStyle}">${escapeXml(fams)}</text>` : ""}
+    ${famsMarkup}
     <text id="text-proms" x="${promsX}" y="${cy}" text-anchor="middle" dominant-baseline="central" transform="rotate(-90, ${promsX}, ${cy})" style="${commonSecondary}">${escapeXml(proms)}</text>
     ${hasRightSide ? `<text id="text-right-side" x="${rightSideX}" y="${cy}" text-anchor="middle" dominant-baseline="central"${rightTransform} style="${commonSecondary}">${escapeXml(rightSideText)}</text>` : ""}
     ${boulsMarkup}
@@ -694,7 +802,9 @@ function renderSignature() {
 
   const bandeBox = safeGetBBox(svg, "text-bande");
   const buqueBox = safeGetBBox(svg, "text-buque");
-  const famsBox = safeGetBBox(svg, "text-fams");
+  const famsBox = famsLogo
+    ? { width: state.famsSize * famsLogo.aspectRatio, height: state.famsSize }
+    : safeGetBBox(svg, "text-fams");
   const promsBox = safeGetBBox(svg, "text-proms");
   const rightBox = safeGetBBox(svg, "text-right-side");
   const boquetteBox = safeGetBBox(svg, "text-boquette");
@@ -703,7 +813,7 @@ function renderSignature() {
   const colWidths = colBoxes.map((b) => b.width);
   const boulsContentH = colBoxes.length ? Math.max(...colBoxes.map((b) => b.height)) : 0;
 
-  const hasFams = state.fams.trim().length > 0;
+  const hasFams = Boolean(famsLogo) || state.fams.trim().length > 0;
   const famsGap = hasFams ? state.famsGap : 0;
   const centerBlockH = Math.max(
     buqueBox.height,

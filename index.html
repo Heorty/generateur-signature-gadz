@@ -57,7 +57,7 @@
                         </div>
                         <div class="form-group full-width">
                             <details class="advanced-options">
-                                <summary>Option avancée : écriture côté droit</summary>
+                                <summary>Options avancées (côté droit, logo Fam'ss)</summary>
                                 <div class="form-grid" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label for="rightSideText">Texte côté droit <span class="hint">(symétrique Prom'ss)</span></label>
@@ -70,6 +70,11 @@
                                             <option value="-90">Vertical (-90°)</option>
                                             <option value="0">Horizontal (0°)</option>
                                         </select>
+                                    </div>
+                                    <div class="form-group full-width">
+                                        <label for="famsLogoInput">Logo pour la Fam'ss <span class="hint">(remplace le texte — SVG, PNG, JPG…)</span></label>
+                                        <input type="file" id="famsLogoInput" accept="image/*,.svg">
+                                        <button type="button" id="removeFamsLogoBtn" class="btn-secondary" style="display: none; margin-top: 6px;">Retirer le logo Fam'ss</button>
                                     </div>
                                 </div>
                             </details>
