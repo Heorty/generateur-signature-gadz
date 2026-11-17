@@ -30,6 +30,7 @@ const DEFAULTS = {
   bouls: ["Boul'ss"],
   boulsCols: "auto",
   rightSideText: "",
+  leftSideOrientation: "-90",
   rightSideOrientation: "90",
   hideBouls: false,
   buqueFont: "Clunsois",
@@ -515,6 +516,7 @@ async function handleFamsLogoUpload(e) {
 function resetParameters() {
   document.getElementById("boulsCols").value = DEFAULTS.boulsCols;
   document.getElementById("rightSideText").value = DEFAULTS.rightSideText;
+  document.getElementById("leftSideOrientation").value = DEFAULTS.leftSideOrientation;
   document.getElementById("rightSideOrientation").value = DEFAULTS.rightSideOrientation;
   document.getElementById("hideBouls").checked = DEFAULTS.hideBouls;
   document.getElementById("buqueFont").value = DEFAULTS.buqueFont;
@@ -551,6 +553,7 @@ function getState() {
       : boulsList.map((s) => s.trim()).filter(Boolean),
     boulsCols: document.getElementById("boulsCols").value || DEFAULTS.boulsCols,
     rightSideText: document.getElementById("rightSideText").value,
+    leftSideOrientation: document.getElementById("leftSideOrientation").value || DEFAULTS.leftSideOrientation,
     rightSideOrientation: document.getElementById("rightSideOrientation").value || DEFAULTS.rightSideOrientation,
     hideBouls: document.getElementById("hideBouls").checked,
     buqueFont: document.getElementById("buqueFont").value || DEFAULTS.buqueFont,
@@ -690,6 +693,7 @@ function buildSignatureSVGString(
     bande,
     boquette,
     rightSideText,
+    leftSideOrientation,
     rightSideOrientation,
     buqueFont,
     famsFont,
@@ -783,7 +787,7 @@ function buildSignatureSVGString(
     <text id="text-bande" x="${cx}" y="${bandeY}" text-anchor="middle" dominant-baseline="central" style="${commonSecondary}">${escapeXml(bande)}</text>
     <text id="text-buque" x="${cx}" y="${buqueY}" text-anchor="middle" dominant-baseline="central" style="${buqueStyle}">${escapeXml(buque)}</text>
     ${famsMarkup}
-    <text id="text-proms" x="${promsX}" y="${cy}" text-anchor="middle" dominant-baseline="central" transform="rotate(-90, ${promsX}, ${cy})" style="${commonSecondary}">${escapeXml(proms)}</text>
+    <text id="text-proms" x="${promsX}" y="${cy}" text-anchor="middle" dominant-baseline="central" transform="rotate(${leftSideOrientation}, ${promsX}, ${cy})" style="${commonSecondary}">${escapeXml(proms)}</text>
     ${hasRightSide ? `<text id="text-right-side" x="${rightSideX}" y="${cy}" text-anchor="middle" dominant-baseline="central"${rightTransform} style="${commonSecondary}">${escapeXml(rightSideText)}</text>` : ""}
     ${boulsMarkup}
     <text id="text-boquette" x="${cx}" y="${boquetteY}" text-anchor="middle" dominant-baseline="central" style="${commonSecondary}">${escapeXml(boquette)}</text>
